@@ -143,10 +143,7 @@
 				</rbs-field-boolean>
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="activation"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.activation_properties', ['ucf']) }}"
-				data-rbs-document-activation-section="">
-			</fieldset>
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
 
 			<fieldset data-rbs-editor-section="skustockinfo"
 				data-editor-section-label="{{ i18nAttr('m.rbs.stock.admin.sku_stock_info', ['ucf']) }}"
@@ -222,12 +219,6 @@
 					</table>
 					<p class="bg-warning lead text-center" ng-if="!stockInfoData.reservationsData">{{ i18n('m.rbs.stock.admin.no_information_to_display', ['ucf']) }}</p>
 				</div>
-
-			</fieldset>
-
-			<fieldset data-rbs-editor-section="systeminfo"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.adminjs.status', ['ucf']) }}"
-				data-rbs-document-system-info-section="">
 			</fieldset>
 
 			<rbs-document-editor-button-bar></rbs-document-editor-button-bar>

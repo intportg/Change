@@ -30,12 +30,6 @@
 				</rbs-field-picker>
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="publication"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.publication_properties', ['ucf']) }}"
-				data-editor-section-icon="icon-globe"
-				data-rbs-document-publication-section="">
-			</fieldset>
-
 			<fieldset data-rbs-editor-section="permissions"
 				data-editor-section-icon="icon-lock"
 				data-editor-section-label="{{ i18nAttr('m.rbs.website.documents.topic_permissions', ['ucf']) }}">
@@ -54,11 +48,7 @@
 				</rbs-field-picker-multiple>
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="systeminfo"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.status', ['ucf']) }}"
-				data-editor-section-icon="icon-info-sign"
-				data-rbs-document-system-info-section="">
-			</fieldset>
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
 
 			<rbs-document-editor-button-bar></rbs-document-editor-button-bar>
 		</form>

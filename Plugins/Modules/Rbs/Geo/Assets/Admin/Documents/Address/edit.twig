@@ -33,10 +33,7 @@
 				<rbs-field-address property="fieldValues" address-fields="document.addressFields"></rbs-field-address>
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="systeminfo"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.adminjs.status', ['ucf']) }}"
-				data-rbs-document-system-info-section="">
-			</fieldset>
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
 
 			<rbs-document-editor-button-bar></rbs-document-editor-button-bar>
 		</form>

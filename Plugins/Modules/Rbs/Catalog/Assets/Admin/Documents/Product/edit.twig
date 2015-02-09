@@ -41,16 +41,7 @@
 				{% include '@Rbs_Catalog/Documents/Product/attributes-section.twig' %}
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="publication"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.publication_properties', ['ucf']) }}"
-				data-rbs-document-publication-section=""
-				data-rbs-document-publication-section-help="{{ i18nAttr('m.rbs.catalog.admin.product_publicationsections_help', ['ucf']) }}">
-			</fieldset>
-
-			<fieldset data-rbs-editor-section="systeminfo"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.adminjs.status', ['ucf']) }}"
-				data-rbs-document-system-info-section="">
-			</fieldset>
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
 
 			<rbs-document-editor-button-bar></rbs-document-editor-button-bar>
 		</form>

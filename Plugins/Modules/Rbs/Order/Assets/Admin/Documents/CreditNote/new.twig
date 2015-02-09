@@ -14,7 +14,6 @@
 			<fieldset data-rbs-editor-section=""
 				data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.general_properties', ['ucf']) }}">
 
-
 				<rbs-field-picker property="ownerId" label="{{ i18nAttr(propertyKey('Rbs_Order_CreditNote', 'ownerId'), ['ucf']) }}"
 						accepted-model="Rbs_User_User" value-ids="true">
 				</rbs-field-picker>
@@ -36,10 +35,7 @@
 				</rbs-field>
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="systeminfo"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.adminjs.status', ['ucf']) }}"
-				data-rbs-document-system-info-section="">
-			</fieldset>
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
 
 			<rbs-document-editor-button-bar></rbs-document-editor-button-bar>
 		</form>

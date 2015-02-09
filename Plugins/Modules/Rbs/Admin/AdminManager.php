@@ -624,11 +624,15 @@ class AdminManager implements \Zend\EventManager\EventsCapableInterface
 		switch ($view)
 		{
 			case 'new':
-				$attributes = ['asideDirectives' => [['name' => 'rbs-aside-editor-menu']]];
+				$attributes = [
+					'model' => $model,
+					'asideDirectives' => [['name' => 'rbs-aside-editor-menu']]
+				];
 				break;
 
 			case 'edit':
 				$attributes = [
+					'model' => $model,
 					'asideDirectives' => [['name' => 'rbs-aside-editor-menu']],
 					'links' => []
 				];
@@ -683,6 +687,7 @@ class AdminManager implements \Zend\EventManager\EventsCapableInterface
 
 			case 'translate':
 				$attributes = [
+					'model' => $model,
 					'asideDirectives' => [
 						['name' => 'rbs-aside-editor-menu'],
 						['name' => 'rbs-aside-translation', 'attributes' => [['name' => 'document', 'value' => 'document']]]

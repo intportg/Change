@@ -23,7 +23,6 @@
 					<p class="form-control-static"><a href="(= document.sku | rbsURL =)">(= document.sku.label =)</a></p>
 				</rbs-field>
 
-
 				<rbs-field ng-hide="priceContext.discount" required="true" label="{{ i18nAttr(propertyKey('Rbs_Price_Price', 'webStore'), ['ucf']) }}">
 					<select class="form-control" ng-required="true" ng-model="document.webStore" rbs-items-from-collection="Rbs_Store_Collection_WebStores">
 						<option value=""> {{ i18n('m.rbs.store.admin.select_webstore', ['ucf']) }}</option>
@@ -32,8 +31,6 @@
 				<rbs-field ng-show="priceContext.discount" label="{{ i18nAttr(propertyKey('Rbs_Price_Price', 'webStore'), ['ucf']) }}">
 					<p class="form-control-static"><a href="(= document.webStore | rbsURL =)">(= document.webStore.label =)</a></p>
 				</rbs-field>
-
-
 
 				<rbs-field ng-hide="priceContext.discount" required="true" label="{{ i18nAttr(propertyKey('Rbs_Price_Price', 'billingArea'), ['ucf']) }}">
 					<select class="form-control" ng-required="true" ng-model="document.billingArea" ng-disabled="!priceContext.webStore.id"
@@ -63,7 +60,8 @@
 
 				<rbs-field ng-show="priceContext.discount" label="{{ i18nAttr(propertyKey('Rbs_Price_Price', 'billingArea'), ['ucf']) }}">
 					<p class="form-control-static">
-						<a href="(= document.billingArea | rbsURL =)">(= document.billingArea.label =)</a></p>
+						<a href="(= document.billingArea | rbsURL =)">(= document.billingArea.label =)</a>
+					</p>
 
 					<table ng-show="priceContext.taxInfo" class="table table-striped">
 						<thead>
@@ -86,7 +84,6 @@
 						</tbody>
 					</table>
 				</rbs-field>
-
 
 				<hr/>
 
@@ -136,18 +133,9 @@
 				<rbs-field-integer label="{{ i18nAttr(propertyKey('Rbs_Price_Price', 'priority'), ['ucf']) }}"
 						ng-disabled="!document.targetId" property="priority">
 				</rbs-field-integer>
-
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="activation"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.activation_properties', ['ucf']) }}"
-				data-rbs-document-activation-section="">
-			</fieldset>
-
-			<fieldset data-rbs-editor-section="systeminfo"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.adminjs.status', ['ucf']) }}"
-				data-rbs-document-system-info-section="">
-			</fieldset>
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
 
 			<rbs-document-editor-button-bar></rbs-document-editor-button-bar>
 		</form>

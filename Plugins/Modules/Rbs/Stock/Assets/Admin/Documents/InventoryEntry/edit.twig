@@ -53,10 +53,7 @@
 				</rbs-field>
 			</fieldset>
 
-			<fieldset data-rbs-editor-section="systeminfo"
-				data-editor-section-label="{{ i18nAttr('m.rbs.admin.adminjs.status', ['ucf']) }}"
-				data-rbs-document-system-info-section="">
-			</fieldset>
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
 
 			<rbs-document-editor-button-bar>
 				<button ng-if="info.nbMovement && info.nbMovement > 0" class="btn btn-headline btn-success"

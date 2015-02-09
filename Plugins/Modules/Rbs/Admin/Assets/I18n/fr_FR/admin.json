@@ -8,6 +8,9 @@
 	"system_properties":{
 		"message":"propriétés système"
 	},
+	"attributes":{
+		"message":"attributs"
+	},
 	"ttl":{
 		"message":"Durée du cache en secondes"
 	},
