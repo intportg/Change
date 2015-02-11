@@ -620,12 +620,16 @@ class AdminManager implements \Zend\EventManager\EventsCapableInterface
 				. ' is not found', 999999);
 		}
 
+		$collectionManager = $event->getApplicationServices()->getCollectionManager();
+		$typologyCollection = $collectionManager->getCollection('Rbs_Generic_Typologies', ['modelName' => $model->getName()]);
+
 		$i18nManager = $event->getApplicationServices()->getI18nManager();
 		switch ($view)
 		{
 			case 'new':
 				$attributes = [
 					'model' => $model,
+					'hasTypology' => count($typologyCollection->getItems()) > 0,
 					'asideDirectives' => [['name' => 'rbs-aside-editor-menu']]
 				];
 				break;
@@ -633,6 +637,7 @@ class AdminManager implements \Zend\EventManager\EventsCapableInterface
 			case 'edit':
 				$attributes = [
 					'model' => $model,
+					'hasTypology' => count($typologyCollection->getItems()) > 0,
 					'asideDirectives' => [['name' => 'rbs-aside-editor-menu']],
 					'links' => []
 				];
@@ -688,6 +693,7 @@ class AdminManager implements \Zend\EventManager\EventsCapableInterface
 			case 'translate':
 				$attributes = [
 					'model' => $model,
+					'hasTypology' => count($typologyCollection->getItems()) > 0,
 					'asideDirectives' => [
 						['name' => 'rbs-aside-editor-menu'],
 						['name' => 'rbs-aside-translation', 'attributes' => [['name' => 'document', 'value' => 'document']]]

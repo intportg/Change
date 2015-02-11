@@ -8,6 +8,44 @@
 		},
 		"auto": false
 	},
+	"/Rbs/Generic/Attribute/": {
+		"model": "Rbs_Generic_Attribute",
+		"name": "list",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Attribute/list.twig",
+			"labelKey": "m.rbs.generic.admin.attribute_list | ucf"
+		},
+		"auto": true
+	},
+	"/Rbs/Generic/Attribute/:id": {
+		"model": "Rbs_Generic_Attribute",
+		"name": "edit",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Attribute/edit.twig",
+			"labelKey": "m.rbs.generic.documents.attribute | ucf",
+			"labelId": "id"
+		},
+		"auto": true
+	},
+	"/Rbs/Generic/Attribute/:id/translate/:LCID": {
+		"model": "Rbs_Generic_Attribute",
+		"name": "translate",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Attribute/translate.twig",
+			"controller": "RbsChangeTranslateEditorController",
+			"labelKey": "m.rbs.admin.admin.translation | ucf"
+		},
+		"auto": true
+	},
+	"/Rbs/Generic/Attribute/new": {
+		"model": "Rbs_Generic_Attribute",
+		"name": "new",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Attribute/new.twig",
+			"labelKey": "m.rbs.admin.adminjs.new_resource | ucf"
+		},
+		"auto": true
+	},
 	"/Rbs/Generic/InitializeWebsite/": {
 		"module": "Rbs_Generic",
 		"name": "InitializeWebsite",
@@ -43,5 +81,43 @@
 			"labelKey": "m.rbs.plugins.admin.registered_list | ucf"
 		},
 		"auto": false
+	},
+	"/Rbs/Generic/Typology/": {
+		"model": "Rbs_Generic_Typology",
+		"name": "list",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Typology/list.twig",
+			"labelKey": "m.rbs.generic.admin.typology_list | ucf"
+		},
+		"auto": true
+	},
+	"/Rbs/Generic/Typology/:id": {
+		"model": "Rbs_Generic_Typology",
+		"name": "edit",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Typology/edit.twig",
+			"labelKey": "m.rbs.generic.documents.typology | ucf",
+			"labelId": "id"
+		},
+		"auto": true
+	},
+	"/Rbs/Generic/Typology/:id/translate/:LCID": {
+		"model": "Rbs_Generic_Typology",
+		"name": "translate",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Typology/translate.twig",
+			"controller": "RbsChangeTranslateEditorController",
+			"labelKey": "m.rbs.admin.admin.translation | ucf"
+		},
+		"auto": true
+	},
+	"/Rbs/Generic/Typology/new": {
+		"model": "Rbs_Generic_Typology",
+		"name": "new",
+		"rule": {
+			"templateUrl": "Document/Rbs/Generic/Typology/new.twig",
+			"labelKey": "m.rbs.admin.adminjs.new_resource | ucf"
+		},
+		"auto": true
 	}
 }

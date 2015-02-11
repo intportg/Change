@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://www.rbs.fr/schema/change-document/4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.rbs.fr/schema/change-document/4.0 http://www.rbschange.fr/schema/4.0/document.xsd"
+	editable="true" localized="true">
+	<properties>
+		<property name="title" type="String" localized="true" />
+		<property name="modelName" type="String" required="true" />
+		<property name="groups" type="InlineArray">
+			<inline name="AttributeGroup" localized="true" editable="true">
+				<properties>
+					<property name="name" type="String" />
+					<property name="title" type="String" localized="true" />
+					<property name="attributes" type="DocumentArray" document-type="Rbs_Generic_Attribute" />
+				</properties>
+			</inline>
+		</property>
+	</properties>
+</document>

@@ -208,6 +208,23 @@ class Schema extends \Change\Db\Schema\SchemaDefinition
 				->addField($schemaManager->newVarCharFieldDefinition('label', array('length' => 255))->setNullable(false))
 				->addKey($this->newPrimaryKey()->addField($td->getField('filter_id')))
 				->setOption('AUTONUMBER', 1);
+
+			$this->tables['change_document_attributes'] = $td = $schemaManager->newTableDefinition('change_document_attributes');
+			$td->addField($schemaManager->newIntegerFieldDefinition('document_id')->setNullable(false))
+				->addField($schemaManager->newIntegerFieldDefinition('typology_id')->setNullable(true))
+				->addField($schemaManager->newTextFieldDefinition('data')->setNullable(false))
+				->addKey($this->newPrimaryKey()->addField($td->getField('document_id')));
+
+			$this->tables['change_document_attributes_index'] = $td = $schemaManager->newTableDefinition('change_document_attributes_index');
+			$td->addField($schemaManager->newIntegerFieldDefinition('attribute_id')->setNullable(false))
+				->addField($schemaManager->newIntegerFieldDefinition('document_id')->setNullable(false))
+				->addField($schemaManager->newIntegerFieldDefinition('index')->setNullable(false)->setDefaultValue(0))
+				->addField($schemaManager->newIntegerFieldDefinition('integer_value')->setNullable(true))
+				->addField($schemaManager->newFloatFieldDefinition('float_value')->setNullable(true))
+				->addField($schemaManager->newDateFieldDefinition('date_value')->setNullable(true))
+				->addField($schemaManager->newCharFieldDefinition('string_value')->setNullable(true))
+				->addKey($this->newPrimaryKey()->addField($td->getField('attribute_id'))->addField($td->getField('document_id'))
+					->addField($td->getField('index')));
 		}
 		return $this->tables;
 	}

@@ -155,4 +155,55 @@ class UpdateLocalizedDocument
 			return;
 		}
 	}
+
+	/**
+	 * @param \Change\Http\Event $event
+	 * @param \Change\Documents\AbstractDocument $document
+	 * @param array $properties
+	 * @throws \Exception
+	 */
+	protected function updateAttributes($event, $document, $properties)
+	{
+		$data = isset($properties['typology$']) ? $properties['typology$'] : null;
+		if (is_array($properties['typology$']))
+		{
+			$documentManager = $event->getApplicationServices()->getDocumentManager();
+			$typology = null;
+			if (isset($data['id']) && $data['id'] > 0)
+			{
+				$typology = $documentManager->getTypology($data['id']);
+			}
+
+			if (!($typology instanceof \Change\Documents\Attributes\Interfaces\Typology))
+			{
+				$documentManager->saveAttributeValues($document, null, []);
+			}
+			else
+			{
+				$newValues = isset($data['values']) && is_array($data['values']) ? $data['values'] : [];
+				$values = $documentManager->getAttributeValues($document);
+				foreach ($typology->getGroups() as $group)
+				{
+					foreach ($group->getAttributes() as $attribute)
+					{
+						if (!array_key_exists('attr_' . $attribute->getId(), $newValues))
+						{
+							continue;
+						}
+
+						if (!$attribute->getLocalized())
+						{
+							$key = '_.' . $attribute->getId();
+						}
+						else
+						{
+							$key = $documentManager->getLCID() . '.' . $attribute->getId();
+						}
+						$values[$key] = $newValues['attr_' . $attribute->getId()];
+					}
+				}
+				$documentManager->saveAttributeValues($document, $typology, $values);
+			}
+		}
+	}
 }

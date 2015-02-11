@@ -55,7 +55,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 	/**
 	 * @var array
 	 */
-	protected $modifiedProperties = array();
+	protected $modifiedProperties = [];
 
 	/**
 	 * @var boolean
@@ -227,7 +227,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 			if ($this->application)
 			{
 				$model = $this->getDocumentModel();
-				$identifiers = array_merge($model->getAncestorsNames(), array($model->getName(), 'Documents'));
+				$identifiers = array_merge($model->getAncestorsNames(), [$model->getName(), 'Documents']);
 				$this->eventManager = $this->application->getNewEventManager($identifiers);
 				$this->eventManager->setEventClass('\Change\Documents\Events\Event');
 			}
@@ -291,9 +291,9 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 				return ($inputValue === null) ? $inputValue : floatval($inputValue);
 
 			case Property::TYPE_DOCUMENTID :
-				if (is_object($inputValue) && is_callable(array($inputValue, 'getId')))
+				if (is_object($inputValue) && is_callable([$inputValue, 'getId']))
 				{
-					$inputValue = call_user_func(array($inputValue, 'getId'));
+					$inputValue = call_user_func([$inputValue, 'getId']);
 				}
 				return max(0, intval($inputValue));
 			case Property::TYPE_JSON:
@@ -481,7 +481,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 
 	protected function clearModifiedProperties()
 	{
-		$this->modifiedProperties = array();
+		$this->modifiedProperties = [];
 	}
 
 	/**
@@ -573,7 +573,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 	public function populateRestDocumentResult($documentResult)
 	{
 		$documentEvent = new \Change\Documents\Events\Event('updateRestResult', $this,
-			array('restResult' => $documentResult, 'urlManager' => $documentResult->getUrlManager()));
+			['restResult' => $documentResult, 'urlManager' => $documentResult->getUrlManager()]);
 		$this->getEventManager()->trigger($documentEvent);
 		return $this;
 	}
@@ -586,7 +586,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 	public function populateRestDocumentLink($documentLink, $extraColumn)
 	{
 		$documentEvent = new \Change\Documents\Events\Event('updateRestResult', $this,
-			array('restResult' => $documentLink, 'extraColumn' => $extraColumn, 'urlManager' => $documentLink->getUrlManager()));
+			['restResult' => $documentLink, 'extraColumn' => $extraColumn, 'urlManager' => $documentLink->getUrlManager()]);
 		$this->getEventManager()->trigger($documentEvent);
 		return $this;
 	}
@@ -598,10 +598,10 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 		if ($as && ($correction instanceof \Change\Documents\Correction))
 		{
 			$jobManager = $as->getJobManager();
-			$jobManager->createNewJob('Change_Correction_Filed', array(
+			$jobManager->createNewJob('Change_Correction_Filed', [
 				'correctionId' => $correction->getId(), 'documentId' => $correction->getDocumentId(),
 				'LCID' => $correction->getLCID()
-			));
+			]);
 		}
 	}
 
@@ -688,6 +688,33 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 				}
 				$l->setQuery($query);
 				$documentResult->addAction($l);
+			}
+
+			if ($document instanceof \Change\Documents\Interfaces\Editable)
+			{
+				$typologyId = $this->getDocumentManager()->getTypologyIdByDocument($document);
+				if ($typologyId === 0)
+				{
+					$documentResult->setProperty('typology$', ['id' => 0]);
+				}
+				elseif ($typologyId > 0)
+				{
+					$attributeValues = [];
+					$values = $this->getDocumentManager()->getAttributeValues($document);
+					$currentLCID = $this->getDocumentManager()->getLCID();
+					if (is_array($values))
+					{
+						foreach ($values as $key => $value)
+						{
+							list ($LCID, $attrId) = explode('.', $key);
+							if ($LCID == '_' || $LCID == $currentLCID)
+							{
+								$attributeValues['attr_' . $attrId] = $value;
+							}
+						}
+					}
+					$documentResult->setProperty('typology$', ['id' => $typologyId, 'values' => $attributeValues]);
+				}
 			}
 		}
 		elseif ($documentResult instanceof \Change\Http\Rest\V1\Resources\DocumentLink)
@@ -785,7 +812,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 		// Add route params according to route.json.
 	}
 
-	protected $ignoredPropertiesForRestEvents = array('model');
+	protected $ignoredPropertiesForRestEvents = ['model'];
 
 	/**
 	 * Return false on error
@@ -807,7 +834,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 			}
 		}
 		$documentEvent = new \Change\Documents\Events\Event('populateDocumentFromRestEvent', $this,
-			array('restEvent' => $event));
+			['restEvent' => $event]);
 		$this->getEventManager()->trigger($documentEvent);
 
 		return $event->getResult() instanceof \Change\Http\Rest\V1\ErrorResult ? false : $this;
@@ -832,7 +859,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 				if ($existingDocument)
 				{
 					$errorResult = new \Change\Http\Rest\V1\ErrorResult('DOCUMENT-ALREADY-EXIST', 'document already exist', HttpResponse::STATUS_CODE_409);
-					$errorResult->setData(array('document-id' => $value));
+					$errorResult->setData(['document-id' => $value]);
 					$errorResult->addDataValue('model-name', $this->getDocumentModelName());
 					$event->setResult($errorResult);
 					return false;
@@ -853,7 +880,7 @@ abstract class AbstractDocument implements \Serializable, EventsCapableInterface
 				catch (\Exception $e)
 				{
 					$errorResult = new \Change\Http\Rest\V1\ErrorResult('INVALID-VALUE-TYPE', 'Invalid property value type', HttpResponse::STATUS_CODE_409);
-					$errorResult->setData(array('name' => $name, 'value' => $value, 'type' => $property->getType()));
+					$errorResult->setData(['name' => $name, 'value' => $value, 'type' => $property->getType()]);
 					$errorResult->addDataValue('document-type', $property->getDocumentType());
 					$event->setResult($errorResult);
 					return false;

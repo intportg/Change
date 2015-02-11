@@ -1,0 +1,17 @@
+<rbs-field-label-title property="title" required="true"
+	label="{{ i18nAttr(propertyKey('Rbs_Generic_Typology', 'label'), ['ucf']) }} / {{ i18nAttr(propertyKey('Rbs_Generic_Typology', 'title'), ['ucf']) }}">
+</rbs-field-label-title>
+
+<rbs-field label="{{ i18nAttr(propertyKey('Rbs_Generic_Typology', 'modelName'), ['ucf']) }}">
+	<rbs-model-selector ng-if="document.isNew()" filter="{abstract: false, editable: true, inline: false, stateless: false}"
+		class="form-control" model="document.modelName"></rbs-model-selector>
+	<p data-ng-if="!document.isNew()"  class="form-control-static">(= modelLabel =) <small class="text-muted">(= document.modelName =)</small></p>
+</rbs-field>
+
+<hr />
+
+<h3>{{ i18n(propertyKey('Rbs_Generic_Typology', 'groups'), ['ucf']) }}</h3>
+
+<rbs-inline-array inline-array="document.groups" new-model="Rbs_Generic_AttributeGroup"
+	data-ref-lcid="document.refLCID">
+</rbs-inline-array>

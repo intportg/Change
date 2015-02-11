@@ -94,5 +94,44 @@
 	},
 	"initialize_website_success":{
 		"message":"l'initialisation de la structure du site s'est déroulée avec succès"
+	},
+	"attributes":{
+		"message":"attributs"
+	},
+	"typology_list":{
+		"message":"typologies"
+	},
+	"typology_create":{
+		"message":"ajouter une typologie"
+	},
+	"attribute_list":{
+		"message":"attributs"
+	},
+	"attribute_create":{
+		"message":"ajouter un attribut"
+	},
+	"attribute_type_boolean":{
+		"message":"oui \/ non"
+	},
+	"attribute_type_integer":{
+		"message":"nombre entier"
+	},
+	"attribute_type_documentId":{
+		"message":"document"
+	},
+	"attribute_type_documentIdArray":{
+		"message":"liste de documents"
+	},
+	"attribute_type_float":{
+		"message":"numérique"
+	},
+	"attribute_type_dateTime":{
+		"message":"date"
+	},
+	"attribute_type_string":{
+		"message":"chaîne de caractères"
+	},
+	"attribute_type_richText":{
+		"message":"texte riche"
 	}
 }

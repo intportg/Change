@@ -17,6 +17,14 @@
 		{{ i18n('m.rbs.tag.admin.common_tags', ['ucf']) }}
 	</a>
 </rbs-links-panel>
+<rbs-links-panel title="{{ i18nAttr('m.rbs.generic.admin.attributes', ['ucf']) }}" icon="icon-th-list">
+	<a data-rbs-active-route="" href="Rbs/Generic/Typology/" data-rbs-panel-link="">
+		{{ i18n('m.rbs.generic.admin.typology_list', ['ucf']) }}
+	</a>
+	<a data-rbs-active-route="" href="Rbs/Generic/Attribute/" data-rbs-panel-link="">
+		{{ i18n('m.rbs.generic.admin.attribute_list', ['ucf']) }}
+	</a>
+</rbs-links-panel>
 <rbs-links-panel title="{{ i18nAttr('m.rbs.plugins.admin.plugin_list', ['ucf']) }}" icon="icon-puzzle-piece">
 	<a data-rbs-active-route="" href="Rbs/Generic/Plugins/Installed/" data-rbs-panel-link="">
 		{{ i18nAttr('m.rbs.plugins.admin.installed_list', ['ucf']) }}

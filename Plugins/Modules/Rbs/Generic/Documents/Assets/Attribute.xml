@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://www.rbs.fr/schema/change-document/4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.rbs.fr/schema/change-document/4.0 http://www.rbschange.fr/schema/4.0/document.xsd"
+	editable="true" localized="true">
+	<properties>
+		<property name="name" type="String" />
+		<property name="title" type="String" localized="true" has-correction="true" />
+		<property name="description" type="RichText" localized="true" has-correction="true" />
+		<property name="valueType" type="String" default-value="String" required="true">
+			<dboptions length="16" />
+			<constraint name="enum" fromList="Rbs_Generic_AttributeValueTypes" />
+		</property>
+		<property name="documentType" type="String" />
+		<property name="usePicker" type="Boolean" default-value="false" />
+		<property name="requiredValue" type="Boolean" default-value="false" />
+		<property name="defaultValue" type="String" />
+		<property name="localizedValue" type="Boolean" default-value="false" />
+		<property name="collectionCode" type="String" >
+			<dboptions length="100" />
+		</property>
+	</properties>
+</document>

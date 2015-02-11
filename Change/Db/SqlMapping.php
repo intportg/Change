@@ -13,7 +13,7 @@ namespace Change\Db;
  * @api
  */
 class SqlMapping
-{	
+{
 	/**
 	 * @api
 	 * @param string $rootDocumentName
@@ -24,8 +24,7 @@ class SqlMapping
 		list($vendor, $module, $name) = explode('_', strtolower($rootDocumentName));
 		return $vendor . '_' . $module . '_doc_' . $name;
 	}
-	
-	
+
 	/**
 	 * @api
 	 * @param string $rootDocumentName
@@ -36,7 +35,7 @@ class SqlMapping
 		list($vendor, $module, $name) = explode('_', strtolower($rootDocumentName));
 		return $vendor . '_' . $module . '_rel_' . $name;
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $rootDocumentName
@@ -46,7 +45,7 @@ class SqlMapping
 	{
 		return $this->getDocumentTableName($rootDocumentName) . '_i18n';
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $moduleName
@@ -57,7 +56,7 @@ class SqlMapping
 		list($vendor, $module) = explode('_', strtolower($moduleName));
 		return $vendor . '_' . $module . '_tree';
 	}
-		
+
 	/**
 	 * Convert Property name in table field name
 	 * @api
@@ -76,7 +75,7 @@ class SqlMapping
 		}
 		return $pn;
 	}
-	
+
 	/**
 	 * Convert \Change\Documents\Property::TYPE_* in \Change\Db\ScalarType::*
 	 * @api
@@ -92,24 +91,24 @@ class SqlMapping
 			case \Change\Documents\Property::TYPE_DOCUMENTID:
 			case \Change\Documents\Property::TYPE_INTEGER:
 				return \Change\Db\ScalarType::INTEGER;
-	
+
 			case \Change\Documents\Property::TYPE_BOOLEAN:
 				return \Change\Db\ScalarType::BOOLEAN;
-	
+
 			case \Change\Documents\Property::TYPE_DATE:
 			case \Change\Documents\Property::TYPE_DATETIME:
 				return \Change\Db\ScalarType::DATETIME;
-	
+
 			case \Change\Documents\Property::TYPE_FLOAT:
 			case \Change\Documents\Property::TYPE_DECIMAL:
 				return \Change\Db\ScalarType::DECIMAL;
-	
+
 			case \Change\Documents\Property::TYPE_JSON:
 			case \Change\Documents\Property::TYPE_LONGSTRING:
 			case \Change\Documents\Property::TYPE_STORAGEURI:
 			case \Change\Documents\Property::TYPE_RICHTEXT:
 				return \Change\Db\ScalarType::TEXT;
-	
+
 			case \Change\Documents\Property::TYPE_LOB:
 			case \Change\Documents\Property::TYPE_INLINE:
 			case \Change\Documents\Property::TYPE_INLINEARRAY:
@@ -126,7 +125,7 @@ class SqlMapping
 	{
 		return 'change_plugin';
 	}
-		
+
 	/**
 	 * @api
 	 * @return string
@@ -135,7 +134,7 @@ class SqlMapping
 	{
 		return 'change_document';
 	}
-	
+
 	/**
 	 * @api
 	 * @return string
@@ -144,7 +143,25 @@ class SqlMapping
 	{
 		return 'change_document_metas';
 	}
-	
+
+	/**
+	 * @api
+	 * @return string
+	 */
+	public function getDocumentAttributesTableName()
+	{
+		return 'change_document_attributes';
+	}
+
+	/**
+	 * @api
+	 * @return string
+	 */
+	public function getDocumentAttributesIndexTableName()
+	{
+		return 'change_document_attributes_index';
+	}
+
 	/**
 	 * @api
 	 * @return string
@@ -153,7 +170,7 @@ class SqlMapping
 	{
 		return 'change_document_deleted';
 	}
-	
+
 	/**
 	 * @api
 	 * @return string

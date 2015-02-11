@@ -1,3 +1,10 @@
+{% if attributes.hasTypology %}
+	<fieldset data-rbs-editor-section="attributes"
+		data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.attributes', ['ucf']) }}"
+		data-rbs-document-attributes-section="">
+	</fieldset>
+
+{% endif %}
 {% if attributes.model.isPublishable %}
 	<fieldset data-rbs-editor-section="publication"
 		data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.publication_properties', ['ucf']) }}"

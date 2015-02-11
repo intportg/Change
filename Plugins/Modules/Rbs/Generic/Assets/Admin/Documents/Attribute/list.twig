@@ -1,0 +1,31 @@
+<div class="row">
+	<div data-rbs-aside-column="">
+		{% include '@Rbs_Admin/view/asides.twig' %}
+		{% include '@Rbs_Admin/view/links.twig' %}
+	</div>
+
+	<div data-rbs-main-column="">
+		<rbs-page-header title="{{ i18nAttr('m.rbs.generic.admin.attribute_list', ['ucf']) }}"></rbs-page-header>
+		<rbs-document-filter-panel open-by-default="false" filter="filter"
+			model="Rbs_Generic_Attribute"></rbs-document-filter-panel>
+
+		<div class="add-elements-bar">
+			{% for newDocumentLink in attributes['newDocumentLinks'] %}
+				<a href="javascript:;" data-ng-href="(= '{{ newDocumentLink.modelName }}' | rbsURL:'new' =)">
+					{{ newDocumentLink.label }}
+				</a>
+			{% endfor %}
+		</div>
+
+		<rbs-document-list data-dlid="DLRbsGenericAttribute"
+			model="Rbs_Generic_Attribute"
+			correction="true" filter-collection="filter">
+			<rbs-column name="label" primary="true"></rbs-column>
+			<rbs-column name="name"></rbs-column>
+			<rbs-column name="valueTypeFormatted"
+				label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'valueType'), ['ucf']) }}">
+				(= doc.valueTypeFormatted =)
+			</rbs-column>
+		</rbs-document-list>
+	</div>
+</div>

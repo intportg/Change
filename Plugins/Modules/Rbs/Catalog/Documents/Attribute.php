@@ -52,12 +52,13 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 			if (in_array('valueTypeFormatted', $extraColumn))
 			{
 				/* @var $attribute Attribute */
-				$fv = $event->getApplicationServices()->getI18nManager()->trans('m.rbs.catalog.documents.attribute_type_'
-					. strtolower($this->getValueType()), array('ucf'));
+				$fv = $event->getApplicationServices()->getI18nManager()
+					->trans('m.rbs.catalog.documents.attribute_type_' . strtolower($this->getValueType()), ['ucf']);
 
 				if ($this->getValueType() == 'Group' && $this->getProductTypology())
 				{
-					$fv .= ' ('.$event->getApplicationServices()->getI18nManager()->trans('m.rbs.catalog.documents.attribute_producttypology', array('ucf')).')';
+					$fv .= ' (' . $event->getApplicationServices()->getI18nManager()
+							->trans('m.rbs.catalog.documents.attribute_producttypology', ['ucf']) . ')';
 				}
 
 				$restResult->setProperty('valueTypeFormatted', $fv);
@@ -115,8 +116,8 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 						{
 							if (is_array($value))
 							{
-								$ids = array();
-								foreach($value as $id)
+								$ids = [];
+								foreach ($value as $id)
 								{
 									if (is_numeric($id) && $id > 0)
 									{
@@ -145,7 +146,7 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 	public function setDefaultValues(\Change\Documents\AbstractModel $documentModel)
 	{
 		parent::setDefaultValues($documentModel);
-		$this->setAttributes(array('specifications', 'listItem'));
+		$this->setAttributes(['specifications', 'listItem']);
 	}
 
 	/**
@@ -167,7 +168,7 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 		{
 			return true;
 		}
-		return  false;
+		return false;
 	}
 
 	/**
@@ -202,9 +203,9 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 	protected function attachEvents($eventManager)
 	{
 		parent::attachEvents($eventManager);
-		$eventManager->attach(\Change\Documents\Events\Event::EVENT_CREATE, array($this, 'onDefaultCreate'), 10);
-		$eventManager->attach(\Change\Documents\Events\Event::EVENT_UPDATE, array($this, 'onDefaultUpdate'), 10);
-		$eventManager->attach('getDefaultItems', array($this, 'onDefaultGetDefaultItems'), 5);
+		$eventManager->attach(\Change\Documents\Events\Event::EVENT_CREATE, [$this, 'onDefaultCreate'], 10);
+		$eventManager->attach(\Change\Documents\Events\Event::EVENT_UPDATE, [$this, 'onDefaultUpdate'], 10);
+		$eventManager->attach('getDefaultItems', [$this, 'onDefaultGetDefaultItems'], 5);
 	}
 
 	/**
@@ -223,7 +224,7 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 				$propertiesErrors = $event->getParam('propertiesErrors');
 				if (!is_array($propertiesErrors))
 				{
-					$propertiesErrors = array();
+					$propertiesErrors = [];
 				}
 				$propertiesErrors['valueType'][] = 'Invalid value type for axis attribute';
 				$event->setParam('propertiesErrors', $propertiesErrors);
@@ -253,7 +254,7 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 				$propertiesErrors = $event->getParam('propertiesErrors');
 				if (!is_array($propertiesErrors))
 				{
-					$propertiesErrors = array();
+					$propertiesErrors = [];
 				}
 				$propertiesErrors['valueType'][] = 'Invalid value type for axis attribute';
 				$event->setParam('propertiesErrors', $propertiesErrors);
@@ -285,13 +286,15 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 			$property = $this->getModelProperty();
 			if ($property && !$property->getLocalized())
 			{
-				if (in_array($property->getType(), [Property::TYPE_INTEGER, Property::TYPE_DOCUMENTID, Property::TYPE_STRING, Property::TYPE_DOCUMENT]))
+				if (in_array($property->getType(),
+					[Property::TYPE_INTEGER, Property::TYPE_DOCUMENTID, Property::TYPE_STRING, Property::TYPE_DOCUMENT]))
 				{
 					return true;
 				}
 			}
 		}
-		elseif (in_array($this->getValueType(), [static::TYPE_GROUP, static::TYPE_DOCUMENTID, static::TYPE_STRING, static::TYPE_INTEGER]))
+		elseif (in_array($this->getValueType(),
+			[static::TYPE_GROUP, static::TYPE_DOCUMENTID, static::TYPE_STRING, static::TYPE_INTEGER]))
 		{
 			return true;
 		}
@@ -317,7 +320,8 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 		$em = $this->getEventManager();
 		$args = $em->prepareArgs([]);
 		$em->trigger('getDefaultItems', $this, $args);
-		if (isset($args['defaultItems'])) {
+		if (isset($args['defaultItems']))
+		{
 			$defaultItems = $args['defaultItems'];
 			if (is_array($defaultItems) || $defaultItems instanceof \Traversable)
 			{
@@ -336,7 +340,8 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 	/**
 	 * @param \Change\Documents\Events\Event $event
 	 */
-	public function onDefaultGetDefaultItems(\Change\Documents\Events\Event $event) {
+	public function onDefaultGetDefaultItems(\Change\Documents\Events\Event $event)
+	{
 
 		if ($event->getDocument() !== $this)
 		{
@@ -345,7 +350,8 @@ class Attribute extends \Compilation\Rbs\Catalog\Documents\Attribute
 		if ($this->getCollectionCode())
 		{
 			$collection = $event->getApplicationServices()->getCollectionManager()->getCollection($this->getCollectionCode());
-			if ($collection) {
+			if ($collection)
+			{
 				$event->setParam('defaultItems', $collection->getItems());
 			}
 		}

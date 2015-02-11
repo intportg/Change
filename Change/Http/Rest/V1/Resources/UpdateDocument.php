@@ -17,7 +17,6 @@ use Zend\Http\Response as HttpResponse;
  */
 class UpdateDocument
 {
-
 	/**
 	 * @param \Change\Http\Event $event
 	 * @throws \RuntimeException
@@ -25,7 +24,6 @@ class UpdateDocument
 	 */
 	protected function getDocument($event)
 	{
-
 		$modelName = $event->getParam('modelName');
 		$model = ($modelName) ? $event->getApplicationServices()->getModelManager()->getModelByName($modelName) : null;
 		if (!$model)
@@ -49,10 +47,11 @@ class UpdateDocument
 	 */
 	public function execute($event)
 	{
+		$event->getApplication()->getLogging()->fatal(__METHOD__ . ' ' . __LINE__);
 		$document = $this->getDocument($event);
 		if (!$document)
 		{
-			//Document Not Found
+			// Document Not Found.
 			return;
 		}
 
@@ -71,6 +70,7 @@ class UpdateDocument
 		try
 		{
 			$transactionManager->begin();
+			$this->updateAttributes($event, $document, $properties);
 			$result = $document->populateDocumentFromRestEvent($event);
 			if ($result)
 			{
@@ -102,11 +102,12 @@ class UpdateDocument
 		catch (\Change\Documents\PropertiesValidationException $e)
 		{
 			$errors = $e->getPropertiesErrors();
-			$errorResult = new ErrorResult('VALIDATION-ERROR', 'Document properties validation error', HttpResponse::STATUS_CODE_409);
+			$errorResult =
+				new ErrorResult('VALIDATION-ERROR', 'Document properties validation error', HttpResponse::STATUS_CODE_409);
 			if (count($errors) > 0)
 			{
 				$i18nManager = $event->getApplicationServices()->getI18nManager();
-				$pe = array();
+				$pe = [];
 				foreach ($errors as $propertyName => $errorsMsg)
 				{
 					foreach ($errorsMsg as $errorMsg)
@@ -118,6 +119,50 @@ class UpdateDocument
 			}
 			$event->setResult($errorResult);
 			return;
+		}
+	}
+
+	/**
+	 * @param \Change\Http\Event $event
+	 * @param \Change\Documents\AbstractDocument $document
+	 * @param array $properties
+	 * @throws \Exception
+	 */
+	protected function updateAttributes($event, $document, $properties)
+	{
+		$event->getApplication()->getLogging()->fatal(__METHOD__ . ' ' . __LINE__);
+		$data = isset($properties['typology$']) ? $properties['typology$'] : null;
+		if (is_array($properties['typology$']))
+		{
+			$documentManager = $event->getApplicationServices()->getDocumentManager();
+			$typology = null;
+			if (isset($data['id']) && is_int($data['id']) && $data['id'] > 0)
+			{
+				$typology = $documentManager->getTypology($data['id']);
+			}
+
+			if (!($typology instanceof \Change\Documents\Attributes\Interfaces\Typology))
+			{
+				$documentManager->saveAttributeValues($document, null, []);
+			}
+			else
+			{
+				$newValues = isset($data['values']) && is_array($data['values']) ? $data['values'] : [];
+				$values = $documentManager->getAttributeValues($document);
+				foreach ($typology->getGroups() as $group)
+				{
+					foreach ($group->getAttributes() as $attribute)
+					{
+						if (!isset($newValues['attr_' . $attribute->getId()]))
+						{
+							continue;
+						}
+
+						$values['_.' . $attribute->getId()] = $newValues['attr_' . $attribute->getId()];
+					}
+				}
+				$documentManager->saveAttributeValues($document, $typology, $values);
+			}
 		}
 	}
 }

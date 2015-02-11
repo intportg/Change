@@ -1,0 +1,25 @@
+<div class="row">
+	<div data-rbs-aside-column="">
+		{% include '@Rbs_Admin/view/asides.twig' %}
+		{% include '@Rbs_Admin/view/links.twig' %}
+	</div>
+
+	<div data-rbs-main-column="">
+		<rbs-page-header title="{{ i18nAttr('m.rbs.generic.admin.typology_list', ['ucf']) }}"></rbs-page-header>
+		<rbs-document-filter-panel open-by-default="false" filter="filter"
+			model="Rbs_Generic_Typology"></rbs-document-filter-panel>
+
+		<div class="add-elements-bar">
+			{% for newDocumentLink in attributes['newDocumentLinks'] %}
+				<a href="javascript:;" data-ng-href="(= '{{ newDocumentLink.modelName }}' | rbsURL:'new' =)">
+					{{ newDocumentLink.label }}
+				</a>
+			{% endfor %}
+		</div>
+
+		<rbs-document-list data-dlid="DLRbsGenericTypology" model="Rbs_Generic_Typology" filter-collection="filter">
+			<rbs-column name="label" primary="true"></rbs-column>
+			<rbs-column name="modelName">(= doc.modelLabel =) <small class="text-muted">(= doc.modelName =)</small></rbs-column>
+		</rbs-document-list>
+	</div>
+</div>

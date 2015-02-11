@@ -82,6 +82,9 @@ class DocumentManager implements \Zend\EventManager\EventsCapableInterface
 	{
 		$eventManager->attach('injection', [$this, 'onDefaultInjection'], 5);
 		$eventManager->attach('getDisplayableDocument', [$this, 'onDefaultGetDisplayableDocument'], 5);
+		$eventManager->attach('getTypologyIdByDocument', [$this, 'onDefaultGetTypologyIdByDocument'], 5);
+		$eventManager->attach('getAttributeValues', [$this, 'onDefaultGetAttributeValues'], 5);
+		$eventManager->attach('saveAttributeValues', [$this, 'onDefaultSaveAttributeValues'], 5);
 	}
 
 	/**
@@ -194,7 +197,7 @@ class DocumentManager implements \Zend\EventManager\EventsCapableInterface
 		}
 		if ($event->getParam('primary'))
 		{
-			$this->LCIDStackTransaction = array();
+			$this->LCIDStackTransaction = [];
 			$this->inTransaction = false;
 			$this->reset();
 		}
@@ -297,7 +300,7 @@ class DocumentManager implements \Zend\EventManager\EventsCapableInterface
 		$document->setApplication($this->getApplication())
 			->setDocumentManager($this)
 			->setDbProvider($this->dbProvider);
-		$this->getEventManager()->trigger('injection', $this, array('document' => $document));
+		$this->getEventManager()->trigger('injection', $this, ['document' => $document]);
 		return $document;
 	}
 
@@ -425,7 +428,7 @@ class DocumentManager implements \Zend\EventManager\EventsCapableInterface
 		}
 		elseif ($model && !($model instanceof AbstractModel))
 		{
-			$this->getLogging()->warn(__METHOD__ . ' Invalid document model'. $model);
+			$this->getLogging()->warn(__METHOD__ . ' Invalid document model' . $model);
 			return null;
 		}
 
@@ -618,10 +621,10 @@ class DocumentManager implements \Zend\EventManager\EventsCapableInterface
 		$sq = $qb->query();
 		$sq->bindParameter('id', $documentId);
 
-		$converter = new ResultsConverter($sq->getDbProvider(), array('datas' => ScalarType::TEXT,
-			'deletiondate' => ScalarType::DATETIME));
+		$converter = new ResultsConverter($sq->getDbProvider(), ['datas' => ScalarType::TEXT,
+			'deletiondate' => ScalarType::DATETIME]);
 
-		$row = $sq->getFirstResult(array($converter, 'convertRow'));
+		$row = $sq->getFirstResult([$converter, 'convertRow']);
 		if ($row !== null)
 		{
 			$datas = json_decode($row['datas'], true);
@@ -701,5 +704,249 @@ class DocumentManager implements \Zend\EventManager\EventsCapableInterface
 	public function getLCIDStackSize()
 	{
 		return count($this->LCIDStack);
+	}
+
+	// Attributes.
+
+	/**
+	 * @api
+	 * @param integer $id
+	 * @return \Change\Documents\Attributes\Interfaces\Typology|null
+	 */
+	public function getTypology($id)
+	{
+		$eventManager = $this->getEventManager();
+		$params = $eventManager->prepareArgs(['typologyId' => $id]);
+		$eventManager->trigger('getTypology', $this, $params);
+		return isset($params['typology']) ? $params['typology'] : null;
+	}
+
+	/**
+	 * @api
+	 * @param \Change\Documents\AbstractDocument|integer $document
+	 * @return integer|null
+	 */
+	public function getTypologyByDocument($document)
+	{
+		$typologyId = $this->getTypologyIdByDocument($document);
+		return ($typologyId) ? $this->getTypology($typologyId) : null;
+	}
+
+	/**
+	 * @api
+	 * @param \Change\Documents\AbstractDocument|integer $document
+	 * @return integer|null
+	 */
+	public function getTypologyIdByDocument($document)
+	{
+		if (is_numeric($document))
+		{
+			$document = $this->getDocumentInstance($document);
+		}
+		$eventManager = $this->getEventManager();
+		$params = $eventManager->prepareArgs(['document' => $document]);
+		$eventManager->trigger('getTypologyIdByDocument', $this, $params);
+		return isset($params['typologyId']) ? $params['typologyId'] : null;
+	}
+
+	/**
+	 * @param \Change\Events\Event $event
+	 */
+	public function onDefaultGetTypologyIdByDocument($event)
+	{
+		if ($event->getParam('typologyId') !== null)
+		{
+			return;
+		}
+
+		$document = $event->getParam('document');
+		if (!($document instanceof \Change\Documents\AbstractDocument))
+		{
+			return;
+		}
+
+		$qb = $this->getNewQueryBuilder(__METHOD__);
+		if (!$qb->isCached())
+		{
+			$fb = $qb->getFragmentBuilder();
+			$qb->select($fb->alias($fb->getDocumentColumn('typology_id'), 'typology_id'))
+				->from($fb->getDocumentAttributesTable())
+				->where($fb->eq($fb->getDocumentColumn('id'), $fb->integerParameter('id')));
+		}
+
+		$sq = $qb->query();
+		$sq->bindParameter('id', $document->getId());
+		$row = $sq->getFirstResult();
+		if (is_array($row) && isset($row['typology_id']))
+		{
+			$event->setParam('typologyId', intval($row['typology_id']));
+		}
+	}
+
+	/**
+	 * @api
+	 * @param \Change\Documents\AbstractDocument|integer $document
+	 * @return array
+	 */
+	public function getAttributeValues($document)
+	{
+		if (is_numeric($document))
+		{
+			$document = $this->getDocumentInstance($document);
+		}
+		$eventManager = $this->getEventManager();
+		$params = $eventManager->prepareArgs(['document' => $document]);
+		$eventManager->trigger('getAttributeValues', $this, $params);
+		return isset($params['attributeValues']) ? $params['attributeValues'] : null;
+	}
+
+	/**
+	 * @param \Change\Events\Event $event
+	 */
+	public function onDefaultGetAttributeValues($event)
+	{
+		if ($event->getParam('attributeValues') !== null)
+		{
+			return;
+		}
+
+		$document = $event->getParam('document');
+		if (!($document instanceof \Change\Documents\AbstractDocument))
+		{
+			return;
+		}
+
+		$qb = $this->getNewQueryBuilder(__METHOD__);
+		if (!$qb->isCached())
+		{
+			$fb = $qb->getFragmentBuilder();
+			$qb->select($fb->alias($fb->getDocumentColumn('data'), 'data'))
+				->from($fb->getDocumentAttributesTable())
+				->where($fb->eq($fb->getDocumentColumn('id'), $fb->integerParameter('id')));
+		}
+
+		$sq = $qb->query();
+		$sq->bindParameter('id', $document->getId());
+		$row = $sq->getFirstResult();
+		if ($row['data'])
+		{
+			$event->setParam('attributeValues', json_decode($row['data'], true));
+		}
+	}
+
+	/**
+	 * @api
+	 * @param \Change\Documents\AbstractDocument|integer $document
+	 * @param \Change\Documents\Attributes\Interfaces\Typology|null $typology
+	 * @param array $values
+	 * @return array
+	 */
+	public function saveAttributeValues($document, $typology, $values)
+	{
+		if (is_numeric($document))
+		{
+			$document = $this->getDocumentInstance($document);
+		}
+		$eventManager = $this->getEventManager();
+		$params = $eventManager->prepareArgs(['document' => $document, 'typology' => $typology, 'values' => $values]);
+		$eventManager->trigger('saveAttributeValues', $this, $params);
+	}
+
+	/**
+	 * @param \Change\Events\Event $event
+	 */
+	public function onDefaultSaveAttributeValues($event)
+	{
+		if ($event->getParam('saved') !== null)
+		{
+			return;
+		}
+
+		$document = $event->getParam('document');
+		if (!($document instanceof \Change\Documents\AbstractDocument))
+		{
+			return;
+		}
+		$documentId = $document->getId();
+
+		$typology = $event->getParam('typology');
+		if (!($typology instanceof \Change\Documents\Attributes\Interfaces\Typology))
+		{
+			$typologyId = 0;
+			$values = [];
+		}
+		else
+		{
+			$typologyId = $typology->getId();
+			$values = $typology->normalizeValues($event->getParam('values'), $this->getLCID());
+		}
+
+		$transactionManager = $event->getApplicationServices()->getTransactionManager();
+		try
+		{
+			$transactionManager->begin();
+
+			// Update data in main table.
+			if ($this->getTypologyIdByDocument($document) === null)
+			{
+				$this->insertAttributeValues($documentId, $typologyId, $values);
+			}
+			else
+			{
+				$this->updateAttributeValues($documentId, $typologyId, $values);
+			}
+
+			// Update data in index table.
+			// TODO
+
+			$transactionManager->commit();
+		}
+		catch (\Exception $e)
+		{
+			$transactionManager->rollBack($e);
+		}
+	}
+
+	/**
+	 * @param integer $documentId
+	 * @param integer $typologyId
+	 * @param array $values
+	 */
+	protected function insertAttributeValues($documentId, $typologyId, $values)
+	{
+		$qb = $this->getDbProvider()->getNewStatementBuilder(__METHOD__);
+		if (!$qb->isCached())
+		{
+			$fb = $qb->getFragmentBuilder();
+			$qb->insert($fb->getDocumentAttributesTable(), $fb->column('document_id'), $fb->column('typology_id'),
+				$fb->column('data'));
+			$qb->addValues($fb->integerParameter('document_id'), $fb->integerParameter('typology_id'), $fb->lobParameter('data'));
+		}
+		$is = $qb->insertQuery();
+		$is->bindParameter('document_id', $documentId)->bindParameter('typology_id', $typologyId)
+			->bindParameter('data', json_encode($values));
+		$is->execute();
+	}
+
+	/**
+	 * @param integer $documentId
+	 * @param integer $typologyId
+	 * @param array $values
+	 */
+	protected function updateAttributeValues($documentId, $typologyId, $values)
+	{
+		$qb = $this->getDbProvider()->getNewStatementBuilder(__METHOD__);
+		if (!$qb->isCached())
+		{
+			$fb = $qb->getFragmentBuilder();
+			$qb->update($fb->getDocumentAttributesTable());
+			$qb->assign($fb->column('typology_id'), $fb->integerParameter('typology_id'));
+			$qb->assign($fb->column('data'), $fb->lobParameter('data'));
+			$qb->where($fb->eq($fb->column('document_id'), $fb->integerParameter('document_id')));
+		}
+		$uq = $qb->updateQuery();
+		$uq->bindParameter('document_id', $documentId)->bindParameter('typology_id', $typologyId)
+			->bindParameter('data', json_encode($values));
+		$uq->execute();
 	}
 }

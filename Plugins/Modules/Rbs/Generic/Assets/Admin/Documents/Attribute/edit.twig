@@ -1,0 +1,25 @@
+<div class="row" data-rbs-document-editor-base="" data-model="Rbs_Generic_Attribute">
+	<div class="col-md-12">
+		<rbs-page-header sub-title="{{ i18nAttr(modelKey('Rbs_Generic_Attribute'), ['ucf']) }}"></rbs-page-header>
+	</div>
+
+	<div data-rbs-aside-column="">
+		{% include '@Rbs_Admin/view/asides.twig' %}
+		{% include '@Rbs_Admin/view/links.twig' %}
+	</div>
+
+	<div class="document-form" data-rbs-main-column="">
+		<form data-ng-submit="submit()" data-rbs-document-editor-edit=""
+			data-rbs-document-editor-rbs-generic-attribute-edit="">
+			<fieldset data-rbs-editor-section=""
+				data-editor-section-label="{{ i18nAttr('m.rbs.admin.admin.general_properties', ['ucf']) }}">
+
+				{% include '@Rbs_Generic/Documents/Attribute/properties.twig' %}
+			</fieldset>
+
+			{% include '@Rbs_Admin/view/fieldsets.twig' %}
+
+			<rbs-document-editor-button-bar></rbs-document-editor-button-bar>
+		</form>
+	</div>
+</div>

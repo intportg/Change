@@ -127,7 +127,6 @@ class SharedListeners implements SharedListenerAggregateInterface
 		};
 		$events->attach('Documents', 'updateRestResult', $callback, 5);
 
-
 		/** @var $toIndex \Rbs\Elasticsearch\Index\ToIndexDocuments */
 		$toIndex = null;
 

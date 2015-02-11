@@ -11,6 +11,12 @@
 	"attributes":{
 		"message":"attributs"
 	},
+	"typology":{
+		"message":"typologie"
+	},
+	"typology_select":{
+		"message":"sélectionner une typologie"
+	},
 	"ttl":{
 		"message":"Durée du cache en secondes"
 	},

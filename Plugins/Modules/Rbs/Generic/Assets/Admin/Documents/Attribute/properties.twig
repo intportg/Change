@@ -1,0 +1,63 @@
+<rbs-field-label-title property="title" required="true"
+	label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'label'), ['ucf']) }} / {{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'title'), ['ucf']) }}">
+</rbs-field-label-title>
+
+<rbs-field-rich-text property="description"
+	label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'description'), ['ucf']) }}">
+</rbs-field-rich-text>
+
+<hr />
+
+<rbs-field required="true" label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'valueType'), ['ucf']) }}">
+	<select data-ng-model="document.valueType" data-ng-disabled="!document.isNew()" class="form-control"
+		required="required" data-rbs-items-from-collection="Rbs_Generic_AttributeValueTypes">
+		<option value=""></option>
+	</select>
+</rbs-field>
+
+<div data-ng-show="document.valueType == 'DocumentId' || document.valueType == 'DocumentIdArray'">
+	<rbs-field label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'documentType'), ['ucf']) }}">
+		<rbs-model-selector ng-if="document.isNew()" filter="{abstract: false, editable: true, inline: false, stateless: false}"
+			class="form-control" model="document.documentType"></rbs-model-selector>
+		<p data-ng-if="!document.isNew()"  class="form-control-static">(= documentTypeLabel =)</p>
+	</rbs-field>
+</div>
+
+<div data-ng-show="document.valueType == 'DocumentId'">
+	<rbs-field-boolean property="usePicker"
+		label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'usePicker'), ['ucf']) }}">
+	</rbs-field-boolean>
+</div>
+
+<div data-ng-hide="document.valueType == 'RichText' || document.valueType == 'DocumentIdArray'">
+	<rbs-field label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'collectionCode'), ['ucf']) }}">
+		<select data-ng-model="document.collectionCode" class="form-control"
+			data-rbs-items-from-collection="Rbs_Generic_AttributeCollections">
+			<option value=""></option>
+		</select>
+	</rbs-field>
+</div>
+
+<div data-ng-show="document.valueType == 'String' || document.valueType == 'Integer' || document.valueType == 'Float'">
+	<rbs-field-text property="defaultValue"
+		label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'defaultValue'), ['ucf']) }}">
+	</rbs-field-text>
+</div>
+<div data-ng-show="document.valueType == 'Boolean'">
+	<rbs-field-boolean property="defaultValue"
+		label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'defaultValue'), ['ucf']) }}">
+	</rbs-field-boolean>
+</div>
+
+<div data-ng-show="document.valueType == 'String' || document.valueType == 'RichText'">
+	<rbs-field-boolean property="localizedValue"
+		label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'localizedValue'), ['ucf']) }}">
+	</rbs-field-boolean>
+</div>
+
+<rbs-field-boolean property="requiredValue" data-ng-disable="document.valueType == 'RichText' || document.valueType == 'Boolean'"
+	label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'requiredValue'), ['ucf']) }}">
+</rbs-field-boolean>
+
+<rbs-field-text property="name" label="{{ i18nAttr(propertyKey('Rbs_Generic_Attribute', 'name'), ['ucf']) }}">
+</rbs-field-text>

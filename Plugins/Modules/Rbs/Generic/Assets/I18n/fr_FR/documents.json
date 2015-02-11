@@ -1,5 +1,56 @@
 {
 	"folder":{
 		"message":"dossier"
+	},
+	"attribute":{
+		"message":"attribut"
+	},
+	"attribute_name":{
+		"message":"nom technique"
+	},
+	"attribute_title":{
+		"message":"titre"
+	},
+	"attribute_valueType":{
+		"message":"type d'attribut"
+	},
+	"attribute_defaultValue":{
+		"message":"valeur par défaut de l'attribut"
+	},
+	"attribute_requiredValue":{
+		"message":"attribut requis"
+	},
+	"attribute_localizedValue":{
+		"message":"valeur localisée"
+	},
+	"attribute_description":{
+		"message":"description"
+	},
+	"attribute_documentType":{
+		"message":"modèle de document"
+	},
+	"attribute_collectionCode":{
+		"message":"valeurs comprises dans la collection"
+	},
+	"attribute_usePicker":{
+		"message":"utiliser un picker plutôt qu'une liste"
+	},
+	"typology":{
+		"message":"typologie"
+	},
+	"typology_groups":{
+		"message":"groupes d'attributs"
+	},
+	"typology_modelName":{
+		"message":"modèle de document"
+	},
+	"attributeGroup":{
+		"message":"groupe d'attributs"
+	},
+	"attributeGroup_name":{
+		"message":"nom technique"
+	},
+	"attributeGroup_attributes":{
+		"message":"attributs du groupe"
 	}
 }

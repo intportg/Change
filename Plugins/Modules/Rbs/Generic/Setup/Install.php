@@ -24,6 +24,8 @@ class Install extends \Change\Plugins\InstallBase
 		$configuration->addPersistentEntry('Change/Events/ListenerAggregateClasses/Rbs_Generic',
 			'\Rbs\Generic\Events\SharedListeners');
 		$configuration->addPersistentEntry('Change/Events/CollectionManager/Rbs_Generic', '\Rbs\Generic\Collection\Listeners');
+		$configuration->addPersistentEntry('Change/Events/DocumentManager/Rbs_Generic',
+			'\Rbs\Generic\Events\DocumentManager\Listeners');
 
 		$configuration->addPersistentEntry('Change/Events/Http/Admin/Rbs_Generic', '\Rbs\Generic\Events\Http\Admin\Listeners');
 		$configuration->addPersistentEntry('Change/Events/Http/Rest/Rbs_Generic', '\Rbs\Generic\Events\Http\Rest\Listeners');
@@ -51,18 +53,21 @@ class Install extends \Change\Plugins\InstallBase
 		$configuration->addPersistentEntry('Change/Events/RichTextManager/Rbs_Generic',
 			'\Rbs\Generic\Events\RichTextManager\Listeners');
 		$configuration->addPersistentEntry('Change/Events/JobManager/Rbs_Generic', '\Rbs\Generic\Events\JobManager\Listeners');
-		$configuration->addPersistentEntry('Change/Events/OAuthManager/Rbs_Generic', '\Rbs\Generic\Events\OAuthManager\Listeners');
+		$configuration->addPersistentEntry('Change/Events/OAuthManager/Rbs_Generic',
+			'\Rbs\Generic\Events\OAuthManager\Listeners');
 
-		$configuration->addPersistentEntry('Change/Events/ModelManager/Rbs_Generic', '\Rbs\Generic\Events\ModelManager\Listeners');
+		$configuration->addPersistentEntry('Change/Events/ModelManager/Rbs_Generic',
+			'\Rbs\Generic\Events\ModelManager\Listeners');
 
-		$configuration->addPersistentEntry('Change/Events/PathRuleManager/Rbs_Generic', 'Rbs\Generic\Events\PathRuleManager\Listeners');
+		$configuration->addPersistentEntry('Change/Events/PathRuleManager/Rbs_Generic',
+			'Rbs\Generic\Events\PathRuleManager\Listeners');
 		$configuration->addPersistentEntry('Rbs/Mail/Events/MailManager/Rbs_Generic', 'Rbs\Generic\Events\MailManager\Listeners');
 
-		$configuration->addPersistentEntry('Rbs/Admin/Events/AdminManager/Rbs_Generic', 'Rbs\Generic\Events\AdminManager\Listeners');
+		$configuration->addPersistentEntry('Rbs/Admin/Events/AdminManager/Rbs_Generic',
+			'Rbs\Generic\Events\AdminManager\Listeners');
 
-		$configuration->addPersistentEntry('Rbs/Admin/Events/AdminManager/Rbs_Generic', 'Rbs\Generic\Events\AdminManager\Listeners');
-
-		$configuration->addPersistentEntry('Rbs/Commerce/Events/CatalogManager/Rbs_Generic', '\Rbs\Generic\Events\CatalogManager\Listeners');
+		$configuration->addPersistentEntry('Rbs/Commerce/Events/CatalogManager/Rbs_Generic',
+			'\Rbs\Generic\Events\CatalogManager\Listeners');
 	}
 
 	/**

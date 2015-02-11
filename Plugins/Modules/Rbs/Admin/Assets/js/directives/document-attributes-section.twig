@@ -1,0 +1,71 @@
+<rbs-field label="{{ i18nAttr('m.rbs.admin.admin.typology', ['ucf']) }}">
+	<select class="form-control" data-ng-model="document.typology$.id" data-ng-disabled="!isReferenceLanguage"
+		data-rbs-items-from-collection="Rbs_Generic_Typologies"
+		data-rbs-items-collection-params="modelName:(= modelName =)">
+		<option value="">{{ i18n('m.rbs.admin.admin.typology_select', ['ucf']) }}</option>
+	</select>
+</rbs-field>
+
+<div data-ng-repeat="group in attributeGroups">
+	<div data-ng-if="group.attributes">
+		<hr />
+		<h4>(= group.label =)</h4>
+		<div data-ng-repeat="attribute in group.attributes">
+			<rbs-field label="(= attribute.label =)" data-ng-class="{'required': attribute.required}"
+				property="attr_(= attribute.id =)">
+				<div data-ng-if="attribute.collectionCode">
+					<select data-ng-model="document.typology$.values[attribute.key]" class="form-control"
+						data-rbs-items-from-collection="(= attribute.collectionCode =)" data-ng-disabled="attribute.readonly">
+						<option value=""></option>
+					</select>
+				</div>
+				<div data-ng-if="!attribute.collectionCode">
+					<div data-ng-switch="attribute.type">
+						<input type="text" data-ng-switch-when="String" class="form-control"
+							data-ng-required="attribute.required" id="(= attribute.id =)"
+							data-ng-model="document.typology$.values[attribute.key]" data-ng-disabled="attribute.readonly"/>
+						<rbs-switch data-ng-switch-when="Boolean" ng-model="document.typology$.values[attribute.key]"
+							id="(= attribute.id =)" ng-disabled="attribute.readonly"></rbs-switch>
+						<rbs-date-selector data-ng-switch-when="DateTime" ng-required="attribute.required"
+							ng-model="document.typology$.values[attribute.key]" id="(= attribute.id =)"
+							ng-disabled="attribute.readonly"></rbs-date-selector>
+						<div class="row" data-ng-switch-when="Integer">
+							<div class="col-xs-2">
+								<input type="number" class="form-control" data-ng-required="attribute.required"
+									id="(= attribute.id =)" data-ng-model="document.typology$.values[attribute.key]"
+									data-ng-disabled="attribute.readonly"/>
+							</div>
+						</div>
+						<div class="row" data-ng-switch-when="Float">
+							<div class="col-xs-2">
+								<input type="text" data-rbs-smart-float="" class="form-control"
+									data-ng-required="attribute.required" id="(= attribute.id =)"
+									data-ng-model="document.typology$.values[attribute.key]" data-ng-disabled="attribute.readonly"/>
+							</div>
+						</div>
+						<rbs-document-picker-single data-ng-if="attribute.usePicker" data-ng-switch-when="DocumentId"
+							value-ids="true" context-key="(= 'attr.' + attribute.id =)"
+							ng-model="document.typology$.values[attribute.key]" ng-required="attribute.required"
+							property-label="(= attribute.label =)" selector-title=""
+							accepted-model="(= attribute.documentType =)" ng-disabled="attribute.readonly">
+						</rbs-document-picker-single>
+						<rbs-document-select data-ng-if="!attribute.usePicker" data-ng-switch-when="DocumentId"
+							value-ids="true" ng-model="document.typology$.values[attribute.key]" ng-required="attribute.required"
+							property-label="(= attribute.label =)" selector-title=""
+							accepted-model="(= attribute.documentType =)" ng-disabled="attribute.readonly">
+						</rbs-document-select>
+						<rbs-document-picker-multiple data-ng-switch-when="DocumentIdArray" value-ids="true"
+							context-key="(= 'attr.' + attribute.id =)" ng-model="document.typology$.values[attribute.key]"
+							ng-required="attribute.required" property-label="(= attribute.label =)"
+							selector-title="" accepted-model="(= attribute.documentType =)"
+							ng-disabled="attribute.readonly">
+						</rbs-document-picker-multiple>
+						<rbs-rich-text-input data-ng-switch-when="RichText" use-tabs="false" ng-required="attribute.required"
+							id="(= attribute.id =)" context-key="(= 'attr.' + attribute.id =)"
+							ng-model="document.typology$.values[attribute.key]" profile="Website"></rbs-rich-text-input>
+					</div>
+				</div>
+			</rbs-field>
+		</div>
+	</div>
+</div>

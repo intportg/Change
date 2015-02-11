@@ -39,7 +39,7 @@ use Change\Db\SqlMapping;
  * @name \Change\Db\Query\SQLFragmentBuilder
  */
 class SQLFragmentBuilder
-{	
+{
 	/**
 	 * @var SqlMapping
 	 */
@@ -95,7 +95,6 @@ class SQLFragmentBuilder
 		return $this->sqlMapping;
 	}
 
-
 	/**
 	 * Build a function argument after $name assumed as function arguments
 	 * @api
@@ -108,7 +107,7 @@ class SQLFragmentBuilder
 		array_shift($funcArgs);
 		return new Func($name, $this->normalizeValue($funcArgs));
 	}
-	
+
 	/**
 	 * @api
 	 * @return \Change\Db\Query\Expressions\Func
@@ -117,11 +116,10 @@ class SQLFragmentBuilder
 	{
 		return new Func('SUM', $this->normalizeValue(func_get_args()));
 	}
-	
-	
+
 	/**
 	 * Build a reference to a given table
-	 * 
+	 *
 	 * @api
 	 * @param string $tableName
 	 * @param string $dbName
@@ -145,7 +143,7 @@ class SQLFragmentBuilder
 	{
 		return new Identifier(func_get_args());
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $name
@@ -185,7 +183,7 @@ class SQLFragmentBuilder
 	{
 		return new Concat($this->normalizeValue(func_get_args()));
 	}
-	
+
 	/**
 	 * @api
 	 * @throws \InvalidArgumentException
@@ -223,7 +221,7 @@ class SQLFragmentBuilder
 		{
 			throw new \InvalidArgumentException('Could not convert argument 1 to an Expression', 42013);
 		}
-		
+
 		if (is_string($rhs))
 		{
 			$rhs = $this->string($rhs);
@@ -232,7 +230,7 @@ class SQLFragmentBuilder
 		{
 			throw new \InvalidArgumentException('Could not convert argument 2 to an Expression', 42012);
 		}
-		
+
 		return new Assignment($lhs, $rhs);
 	}
 
@@ -295,7 +293,7 @@ class SQLFragmentBuilder
 	{
 		return $this->typedParameter($parameterName, ScalarType::DECIMAL);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $parameterName
@@ -335,7 +333,7 @@ class SQLFragmentBuilder
 	{
 		return new Numeric($number);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $string
@@ -356,7 +354,7 @@ class SQLFragmentBuilder
 	{
 		return new ExpressionList($this->normalizeValue(func_get_args()));
 	}
-	
+
 	/**
 	 * @api
 	 * @param SelectQuery $selectQuery
@@ -366,7 +364,7 @@ class SQLFragmentBuilder
 	{
 		return new SubQuery($selectQuery);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -379,7 +377,7 @@ class SQLFragmentBuilder
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryPredicate($lhs, $rhs, BinaryPredicate::EQUAL);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -391,8 +389,8 @@ class SQLFragmentBuilder
 		$lhs = $this->normalizeValue($lhs);
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryPredicate($lhs, $rhs, BinaryPredicate::NOTEQUAL);
-	}	
-	
+	}
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -405,7 +403,7 @@ class SQLFragmentBuilder
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryPredicate($lhs, $rhs, BinaryPredicate::GREATERTHAN);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -418,7 +416,7 @@ class SQLFragmentBuilder
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryPredicate($lhs, $rhs, BinaryPredicate::GREATERTHANOREQUAL);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -431,7 +429,7 @@ class SQLFragmentBuilder
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryPredicate($lhs, $rhs, BinaryPredicate::LESSTHAN);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -444,7 +442,6 @@ class SQLFragmentBuilder
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryPredicate($lhs, $rhs, BinaryPredicate::LESSTHANOREQUAL);
 	}
-
 
 	/**
 	 * @api
@@ -486,7 +483,7 @@ class SQLFragmentBuilder
 			array_shift($items);
 			if (count($items))
 			{
-				$converter = function ($item) {return new String(strval($item));};
+				$converter = function ($item) { return new String(strval($item)); };
 				foreach ($items as $item)
 				{
 					if (is_array($item))
@@ -505,7 +502,7 @@ class SQLFragmentBuilder
 		}
 		return new In($this->normalizeValue($lhs), $rhs);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -514,7 +511,7 @@ class SQLFragmentBuilder
 	 */
 	public function notIn($lhs, $rhs)
 	{
-		$pre = call_user_func_array(array($this, 'in'), func_get_args());
+		$pre = call_user_func_array([$this, 'in'], func_get_args());
 		$pre->setNot(true);
 		return $pre;
 	}
@@ -549,7 +546,7 @@ class SQLFragmentBuilder
 		$exists->setNot(true);
 		return $exists;
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -562,7 +559,7 @@ class SQLFragmentBuilder
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryOperation($lhs, $rhs, '+');
 	}
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $lhs
@@ -575,8 +572,7 @@ class SQLFragmentBuilder
 		$rhs = $this->normalizeValue($rhs);
 		return new BinaryOperation($lhs, $rhs, '-');
 	}
-	
-	
+
 	/**
 	 * @api
 	 * @param string | AbstractExpression $expression
@@ -611,7 +607,7 @@ class SQLFragmentBuilder
 		$result->setArguments($this->normalizeValue(func_get_args()));
 		return $result;
 	}
-	
+
 	/**
 	 * @api
 	 * @param InterfaceSQLFragment $predicate1
@@ -640,7 +636,7 @@ class SQLFragmentBuilder
 			if ($accessor->authenticated())
 			{
 				$list = $this->expressionList($this->number($accessor->getId()));
-				foreach ($accessor->getGroups() as $group);
+				foreach ($accessor->getGroups() as $group)
 				{
 					/* @var $group \Change\User\GroupInterface */
 					$list->add($this->number($group->getId()));
@@ -700,7 +696,7 @@ class SQLFragmentBuilder
 	{
 		return $this->table($this->sqlMapping->getPluginTableName());
 	}
-	
+
 	/**
 	 * @api
 	 * @return Table
@@ -718,7 +714,7 @@ class SQLFragmentBuilder
 	{
 		return $this->table($this->sqlMapping->getDocumentCorrectionTable());
 	}
-	
+
 	/**
 	 * @api
 	 * @return Table
@@ -727,7 +723,7 @@ class SQLFragmentBuilder
 	{
 		return $this->table($this->sqlMapping->getDocumentDeletedTable());
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $rootDocumentName
@@ -737,7 +733,7 @@ class SQLFragmentBuilder
 	{
 		return $this->table($this->sqlMapping->getDocumentTableName($rootDocumentName));
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $rootDocumentName
@@ -747,7 +743,7 @@ class SQLFragmentBuilder
 	{
 		return $this->table($this->sqlMapping->getDocumentI18nTableName($rootDocumentName));
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $rootDocumentName
@@ -757,7 +753,7 @@ class SQLFragmentBuilder
 	{
 		return $this->table($this->sqlMapping->getDocumentRelationTableName($rootDocumentName));
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $propertyName
@@ -766,9 +762,9 @@ class SQLFragmentBuilder
 	 */
 	public function getDocumentColumn($propertyName, $tableOrIdentifier = null)
 	{
-		return $this->column($this->sqlMapping->getDocumentFieldName($propertyName), $tableOrIdentifier); 
+		return $this->column($this->sqlMapping->getDocumentFieldName($propertyName), $tableOrIdentifier);
 	}
-	
+
 	/**
 	 * @api
 	 * @param string $moduleName
@@ -778,7 +774,7 @@ class SQLFragmentBuilder
 	{
 		return $this->table($this->sqlMapping->getTreeTableName($moduleName));
 	}
-		
+
 	/**
 	 * @api
 	 * @return Table
@@ -786,6 +782,24 @@ class SQLFragmentBuilder
 	public function getDocumentMetasTable()
 	{
 		return $this->table($this->sqlMapping->getDocumentMetasTableName());
+	}
+
+	/**
+	 * @api
+	 * @return Table
+	 */
+	public function getDocumentAttributesTable()
+	{
+		return $this->table($this->sqlMapping->getDocumentAttributesTableName());
+	}
+
+	/**
+	 * @api
+	 * @return Table
+	 */
+	public function getDocumentAttributesIndexTable()
+	{
+		return $this->table($this->sqlMapping->getDocumentAttributesIndexTableName());
 	}
 
 	/**
@@ -799,7 +813,8 @@ class SQLFragmentBuilder
 	{
 		if ($converter == null)
 		{
-			$converter = function ($item) {
+			$converter = function ($item)
+			{
 				return new Raw(strval($item));
 			};
 		}
@@ -807,7 +822,8 @@ class SQLFragmentBuilder
 		if (is_array($object))
 		{
 			$builder = $this;
-			return array_map(function ($item) use($builder, $converter) {
+			return array_map(function ($item) use ($builder, $converter)
+			{
 				return $builder->normalizeValue($item, $converter);
 			}, $object);
 		}

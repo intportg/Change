@@ -67,23 +67,32 @@ class Listeners implements ListenerAggregateInterface
 						(new \Rbs\Elasticsearch\Collection\Collections())->addFacetRenderingModes($event);
 						break;
 
-					case 'Rbs_Generic_Collection_SortDirections':
-						(new \Rbs\Generic\Collection\Collections())->addSortDirections($event);
+					case 'Rbs_Generic_AttributeCollections':
+						(new \Rbs\Generic\Collection\Collections())->addAttributeCollections($event);
 						break;
-					case 'Rbs_Generic_Collection_PermissionRoles':
-						(new \Rbs\Generic\Collection\Collections())->addPermissionRoles($event);
+					case 'Rbs_Generic_AttributeValueTypes':
+						(new \Rbs\Generic\Collection\Collections())->addAttributeValueTypes($event);
 						break;
-					case 'Rbs_Generic_Collection_PermissionPrivileges':
-						(new \Rbs\Generic\Collection\Collections())->addPermissionPrivileges($event);
-						break;
-					case 'Rbs_Generic_Collection_TimeZones':
-						(new \Rbs\Generic\Collection\Collections())->addTimeZones($event);
+					case 'Rbs_Generic_Collection_AddressFields':
+						(new \Rbs\Generic\Collection\Collections())->addAddressFields($event);
 						break;
 					case 'Rbs_Generic_Collection_Languages':
 						(new \Rbs\Generic\Collection\Collections())->addLanguages($event);
 						break;
-					case 'Rbs_Generic_Collection_AddressFields':
-						(new \Rbs\Generic\Collection\Collections())->addAddressFields($event);
+					case 'Rbs_Generic_Collection_PermissionPrivileges':
+						(new \Rbs\Generic\Collection\Collections())->addPermissionPrivileges($event);
+						break;
+					case 'Rbs_Generic_Collection_PermissionRoles':
+						(new \Rbs\Generic\Collection\Collections())->addPermissionRoles($event);
+						break;
+					case 'Rbs_Generic_Collection_SortDirections':
+						(new \Rbs\Generic\Collection\Collections())->addSortDirections($event);
+						break;
+					case 'Rbs_Generic_Collection_TimeZones':
+						(new \Rbs\Generic\Collection\Collections())->addTimeZones($event);
+						break;
+					case 'Rbs_Generic_Typologies':
+						(new \Rbs\Generic\Collection\Collections())->addTypologies($event);
 						break;
 
 					case 'Rbs_Geo_All_Countries_Codes':
@@ -146,12 +155,15 @@ class Listeners implements ListenerAggregateInterface
 				'Rbs_Elasticsearch_FacetConfigurationType',
 				'Rbs_Elasticsearch_FacetRenderingModes',
 
-				'Rbs_Generic_Collection_SortDirections',
+				'Rbs_Generic_AttributeCollections',
+				'Rbs_Generic_AttributeValueTypes',
+				'Rbs_Generic_Collection_AddressFields',
+				'Rbs_Generic_Collection_Languages',
 				'Rbs_Generic_Collection_PermissionRoles',
 				'Rbs_Generic_Collection_PermissionPrivileges',
+				'Rbs_Generic_Collection_SortDirections',
 				'Rbs_Generic_Collection_TimeZones',
-				'Rbs_Generic_Collection_Languages',
-				'Rbs_Generic_Collection_AddressFields',
+				'Rbs_Generic_Typologies',
 
 				'Rbs_Geo_All_Countries_Codes',
 				'Rbs_Geo_Collection_Countries',

@@ -1,0 +1,21 @@
+<div data-rbs-generic-attribute-group-editor="">
+	<rbs-field-text data-ng-if="!localization.inTranslation()" property="label" required="true"
+			label="{{ i18nAttr(propertyKey('Rbs_Generic_AttributeGroup', 'label'), ['ucf']) }}">
+	</rbs-field-text>
+
+	<rbs-field property="title" label="{{ i18nAttr(propertyKey('Rbs_Generic_AttributeGroup', 'title'), ['ucf']) }}">
+		<input type="text" name="title" class="form-control" data-ng-model="document.LCID[localization.currentLCID()].title" />
+	</rbs-field>
+
+	<rbs-field-text data-ng-if="!localization.inTranslation()" property="name" required="true"
+		label="{{ i18nAttr(propertyKey('Rbs_Generic_AttributeGroup', 'name'), ['ucf']) }}">
+	</rbs-field-text>
+
+	<rbs-field data-ng-if="!localization.inTranslation()" property="attributes"
+			label="{{ i18nAttr(propertyKey('Rbs_Generic_AttributeGroup', 'attributes'), ['ucf']) }}">
+		<rbs-document-picker-multiple ng-model="document.attributes" select-model="Rbs_Generic_Attribute"
+				property-label="{{ i18nAttr(propertyKey('Rbs_Generic_AttributeGroup', 'attributes'), ['ucf']) }}"
+				context-key="(= getContextKey() =)_attributes">
+		</rbs-document-picker-multiple>
+	</rbs-field>
+</div>

@@ -95,11 +95,12 @@
 				$scope.reset = reset;
 				$scope.submit = submit;
 				$scope.hasStatus = hasStatus;
+				$scope.modelName = getDocumentModelName();
 
 				$scope.navigationContext = Navigation.getCurrentContext();
 				var lastLocationChangeSuccessUrl = $location.absUrl();
 
-				$scope.$on('$locationChangeSuccess', function (event) {
+				$scope.$on('$locationChangeSuccess', function(event) {
 					var url = $location.absUrl();
 					if (lastLocationChangeSuccessUrl != url) {
 						$scope.navigationContext = Navigation.getCurrentContext();
@@ -962,7 +963,7 @@
 							if ($routeParams['from']) {
 								var fromId = parseInt($routeParams['from'], 10);
 								if (!isNaN(fromId)) {
-									ctrl.addHeaderMessage('<div rbs-document-editor-create-from-message="createFromReferenceDocument"></div>');
+									ctrl.addHeaderMessage('<div data-rbs-document-editor-create-from-message="createFromReferenceDocument"></div>');
 
 									REST.resource(ctrl.getDocumentModelName(), fromId, doc.LCID).then(
 										// Success
@@ -974,7 +975,8 @@
 										},
 										// Error
 										function() {
-											NotificationCenter.error(i18n.trans('m.rbs.admin.admin.reference_document_could_not_be_loaded'), '', 'EDITOR');
+											NotificationCenter.error(i18n.trans('m.rbs.admin.admin.reference_document_could_not_be_loaded'),
+												'', 'EDITOR');
 										}
 									);
 								}
@@ -985,7 +987,6 @@
 						scope.terminateSave = function(doc) {
 							$location.path(doc.url());
 						};
-
 					};
 				}
 			};
@@ -1015,79 +1016,70 @@
 	 *     </div>
 	 * </pre>
 	 */
-	app.directive('rbsDocumentEditorEdit', ['$filter', '$routeParams', '$location', 'RbsChange.NotificationCenter', 'RbsChange.REST', 'RbsChange.i18n', 'RbsChange.Utils',
-		function ($filter, $routeParams, $location, NotificationCenter, REST, i18n, Utils)
-		{
-			return {
-				restrict : 'A',
-				require : '^rbsDocumentEditorBase',
-				scope : false,
-				priority : 900,
+	app.directive('rbsDocumentEditorEdit',
+		['$filter', '$routeParams', '$location', 'RbsChange.NotificationCenter', 'RbsChange.REST', 'RbsChange.i18n',
+			'RbsChange.Utils',
+			function($filter, $routeParams, $location, NotificationCenter, REST, i18n, Utils) {
+				return {
+					restrict: 'A',
+					require: '^rbsDocumentEditorBase',
+					scope: false,
+					priority: 900,
 
-				controller : function () {},
+					controller: function() {},
 
-				compile : function (tElement)
-				{
-					tElement.attr('name', 'form');
-					tElement.addClass('form-horizontal');
+					compile: function(tElement) {
+						tElement.attr('name', 'form');
+						tElement.addClass('form-horizontal');
 
-					return function rbsDocumentEditorEditLink (scope, iElement, iAttrs, ctrl)
-					{
-						// First, we check if there is a Navigation Context available for this editor.
+						return function rbsDocumentEditorEditLink(scope, iElement, iAttrs, ctrl) {
+							// First, we check if there is a Navigation Context available for this editor.
 
-						// If there is one, it will be resolved by the prepareContext() method, and we don't need
-						// to do anything here.
-						if (! ctrl.prepareContext())
-						{
-							// No navigation Context:
-							// Load Document from the server with id and LCID coming from the route's params.
-							REST.resource(ctrl.getDocumentModelName(), parseInt($routeParams.id, 10), $routeParams.LCID).then(
-								// Success
-								function (doc)
-								{
-									// Check the model name of the loaded Document:
-									// It it's not the same as the expected one ("model" attribute), the user is redirected
-									// to the right editor for the loaded Document.
-									if (doc.model !== ctrl.getDocumentModelName()) {
-										$location.path($filter('rbsURL')(doc, 'edit'));
-									}
-									else {
-										ctrl.prepareEdition(doc);
-									}
-								},
-								// Error
-								function ()
-								{
-									NotificationCenter.error(
-										i18n.trans('m.rbs.admin.admin.document_does_not_exist | ucf') + ' ' +
-										'<a href="' + $filter('rbsURL')(ctrl.getDocumentModelName(), 'new') + '">' +
-										i18n.trans('m.rbs.admin.admin.create | ucf | etc') +
-										'</a>', '', 'EDITOR'
-											);
+							// If there is one, it will be resolved by the prepareContext() method, and we don't need
+							// to do anything here.
+							if (!ctrl.prepareContext()) {
+								// No navigation Context:
+								// Load Document from the server with id and LCID coming from the route's params.
+								REST.resource(ctrl.getDocumentModelName(), parseInt($routeParams.id, 10), $routeParams.LCID).then(
+									// Success
+									function(doc) {
+										// Check the model name of the loaded Document:
+										// It it's not the same as the expected one ("model" attribute), the user is redirected
+										// to the right editor for the loaded Document.
+										if (doc.model !== ctrl.getDocumentModelName()) {
+											$location.path($filter('rbsURL')(doc, 'edit'));
 										}
+										else {
+											ctrl.prepareEdition(doc);
+										}
+									},
+									// Error
+									function() {
+										NotificationCenter.error(
+											i18n.trans('m.rbs.admin.admin.document_does_not_exist | ucf') + ' ' +
+											'<a href="' + $filter('rbsURL')(ctrl.getDocumentModelName(), 'new') + '">' +
+											i18n.trans('m.rbs.admin.admin.create | ucf | etc') +
+											'</a>', '', 'EDITOR'
+										);
+									}
 								);
 							}
 
+							scope.$on('Change:DocumentChanged', function(event, doc) {
+								if (doc && scope.document.id === doc.id) {
+									scope.reload();
+								}
+							});
 
-						scope.$on('Change:DocumentChanged', function (event, doc)
-						{
-							if (doc && scope.document.id === doc.id) {
-								scope.reload();
-							}
-						});
-
-						scope.reload = function ()
-						{
-							if (Utils.isDocument(scope.document)) {
-								REST.resource(scope.document).then(ctrl.prepareEdition);
-							}
+							scope.reload = function() {
+								if (Utils.isDocument(scope.document)) {
+									REST.resource(scope.document).then(ctrl.prepareEdition);
+								}
+							};
 						};
-
-					};
-				}
-
-			};
-		}]);
+					}
+				};
+			}]);
 
 	/**
 	 * @ngdoc directive
@@ -1127,7 +1119,7 @@
 								'<label class="col-lg-3 control-label">' + i18n.trans('m.rbs.admin.admin.lcid | ucf') +
 								'</label>' +
 								'<div class="col-lg-3 controls">' +
-									'<select class="form-control" ng-model="currentLCID" ng-options="lcid as locale.label for (lcid, locale) in availableTranslations"></select>' +
+									'<select class="form-control" data-ng-model="currentLCID" data-ng-options="lcid as locale.label for (lcid, locale) in availableTranslations"></select>' +
 								'</div>' +
 							'</div><hr/>'
 						);
@@ -1158,7 +1150,6 @@
 								data.promises.push(p1);
 								data.promises.push(p2);
 							});
-
 						};
 					}
 				};
@@ -1181,6 +1172,7 @@
 	editorSectionDirective = ['RbsChange.Utils', '$location', function(Utils, $location) {
 		var defaultSectionIcons = {
 			publication: 'icon-globe',
+			attributes: 'icon-th-list',
 			activation: 'icon-time',
 			systeminfo: 'icon-info-sign',
 			permissions: 'icon-lock',
@@ -1258,7 +1250,6 @@
 					});
 				};
 			}
-
 		};
 	}];
 	app.directive('rbsEditorSection', editorSectionDirective);
@@ -1276,15 +1267,14 @@
 	app.directive('rbsDocumentEditorCreateFromMessage', ['RbsChange.i18n', function(i18n) {
 		return {
 			restrict: 'A',
-			template:
-				'<div class="alert alert-info">' +
-					'<p ng-if="refDoc">' +
+			template: '<div class="alert alert-info">' +
+					'<p data-ng-if="refDoc">' +
 						'<i class="icon-info-sign icon-3x pull-left"></i> ' +
 						i18n.trans('m.rbs.admin.admin.creating_a_new_document_from') +
-						' <strong><a href target="_blank" ng-href="(= refDoc | rbsURL =)"><span ng-bind="refDoc.label"></span> <i class="icon-external-link"></i></a></strong>.<br/>' +
+						' <strong><a href target="_blank" data-ng-href="(= refDoc | rbsURL =)"><span data-ng-bind="refDoc.label"></span> <i class="icon-external-link"></i></a></strong>.<br/>' +
 						i18n.trans('m.rbs.admin.admin.creating_a_new_document_from_tip') +
 					'</p>' +
-					'<p ng-if="! refDoc">' +
+					'<p data-ng-if="! refDoc">' +
 						'<i class="icon-spin icon-spinner"></i> ' +
 						i18n.trans('m.rbs.admin.admin.loading_reference_document | ucf | etc') +
 					'</p>' +
